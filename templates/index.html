@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* Light gray background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chat-box {
+            background-color: #ffffff; /* White background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .user-message {
+            background-color: #9b59b6; /* Purple background for user messages */
+            color: #ffffff; /* White text */
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            align-self: flex-end; /* Align user messages to the right */
+        }
+        .bot-message {
+            background-color: #ffffff; /* White background for bot messages */
+            color: #444444; /* Dark text */
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+            align-self: flex-start; /* Align bot messages to the left */
+        }
+        .input-container {
+            margin-top: 20px;
+            display: flex;
+        }
+        .user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .submit-button {
+            background-color: #9b59b6; /* Purple background for submit button */
+            color: #ffffff; /* White text */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .clear-button {
+            background-color: #e74c3c; /* Red background for clear button */
+            color: #ffffff; /* White text */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .heading {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">VOICEBOT</div>
+        <div class="chat-box" id="chat-box">
+            {% for entry in chat_history %}
+                {% if entry.user %}
+                    <div class="user-message">{{ entry.user }}</div>
+                {% endif %}
+                {% if entry.bot %}
+                    <div class="bot-message">{{ entry.bot }}</div>
+                {% endif %}
+                {% if entry.audio %}
+                    <audio autoplay controls> <!-- Added autoplay attribute -->
+                        <source src="data:audio/mpeg;base64,{{ entry.audio }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <form id="user-input-form" class="input-container" action="/chat" method="post">
+            <input type="text" class="user-input" id="user-input" name="user_input" placeholder="Type your message...">
+            <button type="submit" class="submit-button">Send</button>
+        </form>
+        <form id="record-audio-form" class="input-container" action="/record_audio" method="post">
+            <button type="submit" class="submit-button">Record Audio</button>
+        </form>
+        <form id="clear-history-form" action="/reset" method="post">
+            <button type="submit" class="clear-button">Clear History</button>
+        </form>
+    </div>
+</body>
+</html>
